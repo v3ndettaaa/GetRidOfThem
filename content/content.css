@@ -8,17 +8,28 @@
   overflow: hidden !important;
 }
 
+/* Bulletproof Pointer Lock: Disable ALL pointer events on Twitter elements when shielded */
+.grot-shielded-tweet:not(.grot-is-revealed) * {
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+/* Enable pointer events ONLY on our overlay shield and its children */
+.grot-shielded-tweet:not(.grot-is-revealed) .grot-overlay-shield,
+.grot-shielded-tweet:not(.grot-is-revealed) .grot-overlay-shield * {
+  pointer-events: auto !important;
+  user-select: auto !important;
+}
+
 /* Apply CSS Blur filter ONLY when container is NOT revealed */
 .grot-shielded-tweet:not(.grot-is-revealed) > div:not(.grot-overlay-shield):not(.grot-rehide-btn) {
   filter: blur(14px) opacity(0.35) !important;
   transition: filter 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease !important;
-  user-select: none !important;
-  pointer-events: none !important;
 }
 
-/* Remove blur cleanly when explicitly revealed by user */
-.grot-shielded-tweet.grot-is-revealed > div,
-.grot-shielded-tweet.grot-is-revealed div {
+/* Remove blur & restore full interactivity when explicitly revealed by user */
+.grot-shielded-tweet.grot-is-revealed *,
+.grot-shielded-tweet.grot-is-revealed > div {
   filter: none !important;
   opacity: 1 !important;
   user-select: auto !important;
@@ -143,6 +154,7 @@
   backdrop-filter: blur(8px) !important;
   opacity: 0.85 !important;
   transition: opacity 0.2s ease !important;
+  pointer-events: auto !important;
 }
 
 .grot-rehide-btn:hover {

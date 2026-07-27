@@ -43,14 +43,26 @@ let currentSettings = { ...DEFAULT_SETTINGS };
 let processedTweets = new WeakSet();
 
 /**
- * Loads extension configuration settings from chrome.storage.local
+ * Safely checks if Chrome/Extension context is valid (prevents "Extension context invalidated" error on reload)
+ */
+function isExtensionContextValid() {
+  try {
+    return typeof chrome !== 'undefined' && !!chrome.runtime && !!chrome.runtime.id;
+  } catch (e) {
+    return false;
+  }
+}
+
+/**
+ * Loads extension configuration settings from chrome.storage.local safely
  */
 async function loadSettings() {
+  if (!isExtensionContextValid()) return;
   try {
     const data = await chrome.storage.local.get(DEFAULT_SETTINGS);
     currentSettings = { ...DEFAULT_SETTINGS, ...data };
   } catch (error) {
-    console.error('GetRidOfThem: Failed to load settings from storage', error);
+    // Ignore invalid context errors gracefully during dev reload
   }
 }
 
@@ -149,14 +161,15 @@ function containsTargetEmoji(text) {
 }
 
 /**
- * Increments the total count of shielded tweets in chrome.storage.local
+ * Increments the total count of shielded tweets in chrome.storage.local safely
  */
 async function incrementShieldedCount() {
+  if (!isExtensionContextValid()) return;
   try {
     currentSettings.totalShieldedCount = (currentSettings.totalShieldedCount || 0) + 1;
     await chrome.storage.local.set({ totalShieldedCount: currentSettings.totalShieldedCount });
   } catch (err) {
-    console.error('GetRidOfThem: Failed to update shielded count', err);
+    // Ignore invalid context errors gracefully during reload
   }
 }
 
@@ -173,8 +186,8 @@ function revealTargetElement(targetEl, overlay, rehideBtn) {
     overlay.classList.add('grot-revealed');
   }
 
-  // Clear blur filter directly from all descendant elements
-  const children = targetEl.querySelectorAll('div');
+  // Clear blur filter and restore full interactivity on all descendant elements
+  const children = targetEl.querySelectorAll('div, span, p, img, a, article');
   children.forEach((child) => {
     if (!child.classList.contains('grot-overlay-shield') && !child.classList.contains('grot-rehide-btn') && !child.closest('.grot-overlay-shield')) {
       child.style.setProperty('filter', 'none', 'important');
@@ -203,7 +216,7 @@ function rehideTargetElement(targetEl, overlay, rehideBtn) {
   }
 
   // Restore blur filter on child elements
-  const children = targetEl.querySelectorAll('div');
+  const children = targetEl.querySelectorAll('div, span, p, img, a, article');
   children.forEach((child) => {
     if (!child.classList.contains('grot-overlay-shield') && !child.classList.contains('grot-rehide-btn') && !child.closest('.grot-overlay-shield')) {
       child.style.removeProperty('filter');
@@ -351,7 +364,7 @@ function unshieldElement(targetEl) {
   targetEl.classList.remove('grot-shielded-tweet');
   targetEl.classList.remove('grot-is-revealed');
 
-  const children = targetEl.querySelectorAll('div');
+  const children = targetEl.querySelectorAll('div, span, p, img, a, article');
   children.forEach((child) => {
     child.style.removeProperty('filter');
     child.style.removeProperty('opacity');
@@ -479,14 +492,21 @@ async function init() {
   observeFeed();
 
   // Listen for storage changes from the popup UI in real-time
-  chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName === 'local') {
-      for (const [key, { newValue }] of Object.entries(changes)) {
-        currentSettings[key] = newValue;
-      }
-      refreshExistingShields();
+  if (isExtensionContextValid()) {
+    try {
+      chrome.storage.onChanged.addListener((changes, areaName) => {
+        if (!isExtensionContextValid()) return;
+        if (areaName === 'local') {
+          for (const [key, { newValue }] of Object.entries(changes)) {
+            currentSettings[key] = newValue;
+          }
+          refreshExistingShields();
+        }
+      });
+    } catch (e) {
+      // Ignore storage listener registration errors if context invalidated
     }
-  });
+  }
 }
 
 // Start content script execution
