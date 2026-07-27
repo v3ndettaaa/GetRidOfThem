@@ -167,12 +167,7 @@ function revealTargetElement(targetEl, overlay, rehideBtn) {
   targetEl.dataset.grotUserRevealed = 'true';
   targetEl.classList.add('grot-is-revealed');
 
-  if (overlay) {
-    overlay.style.setProperty('display', 'none', 'important');
-    overlay.classList.add('grot-revealed');
-  }
-
-  // Clear blur filter directly from child elements
+  // Immediately clear blur filter directly from child elements
   const children = targetEl.querySelectorAll(':scope > div');
   children.forEach((child) => {
     if (child !== overlay && child !== rehideBtn) {
@@ -186,6 +181,15 @@ function revealTargetElement(targetEl, overlay, rehideBtn) {
   if (rehideBtn) {
     rehideBtn.style.setProperty('display', 'block', 'important');
   }
+
+  // Delay hiding overlay by 60ms so mouseup/pointerup events are swallowed by overlay
+  // and Twitter's link router receives 0 navigation events!
+  setTimeout(() => {
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+      overlay.classList.add('grot-revealed');
+    }
+  }, 60);
 }
 
 /**
@@ -265,9 +269,7 @@ function shieldElement(targetEl) {
         e.stopPropagation();
         e.stopImmediatePropagation();
       }
-      if (e.type === 'click' || e.type === 'touchend') {
-        rehideTargetElement(targetEl, overlay, rehideBtn);
-      }
+      rehideTargetElement(targetEl, overlay, rehideBtn);
       return false;
     };
 
@@ -288,9 +290,11 @@ function shieldElement(targetEl) {
     card.appendChild(revealBtn);
   }
 
+  let revealTriggered = false;
+
   // Master handler for overlay click/touch events:
   // Traps pointerdown/mousedown/pointerup/mouseup so Twitter's link router receives 0 events!
-  // Performs reveal action ONLY on click or touchend when overlay is still in place!
+  // Immediately removes blur filter and delays hiding overlay by 60ms to swallow pointerup
   const handleOverlayInteraction = (e) => {
     if (e) {
       e.preventDefault();
@@ -298,15 +302,17 @@ function shieldElement(targetEl) {
       e.stopImmediatePropagation();
     }
 
-    if (currentSettings.allowReveal && (e.type === 'click' || e.type === 'touchend')) {
+    if (currentSettings.allowReveal && !revealTriggered) {
+      revealTriggered = true;
       revealTargetElement(targetEl, overlay, rehideBtn);
     }
 
     return false;
   };
 
-  ['click', 'mousedown', 'mouseup', 'pointerdown', 'pointerup', 'touchstart', 'touchend'].forEach((evtType) => {
+  ['click', 'mousedown', 'pointerdown', 'touchstart'].forEach((evtType) => {
     overlay.addEventListener(evtType, handleOverlayInteraction, { capture: true });
+    card.addEventListener(evtType, handleOverlayInteraction, { capture: true });
   });
 
   overlay.appendChild(card);
