@@ -207,7 +207,10 @@ function revealTargetElement(targetEl, overlay, rehideBtn) {
   });
 
   if (rehideBtn) {
+    rehideBtn.style.removeProperty('display');
     rehideBtn.style.setProperty('display', 'block', 'important');
+    rehideBtn.style.setProperty('opacity', '0.85', 'important');
+    rehideBtn.style.setProperty('pointer-events', 'auto', 'important');
   }
 }
 
@@ -239,7 +242,14 @@ function rehideTargetElement(targetEl, overlay, rehideBtn) {
   });
 
   if (rehideBtn) {
-    rehideBtn.style.setProperty('display', 'none', 'important');
+    rehideBtn.style.setProperty('opacity', '0', 'important');
+    rehideBtn.style.setProperty('pointer-events', 'none', 'important');
+
+    setTimeout(() => {
+      if (rehideBtn) {
+        rehideBtn.style.setProperty('display', 'none', 'important');
+      }
+    }, 350);
   }
 }
 

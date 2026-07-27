@@ -21,6 +21,13 @@
   user-select: auto !important;
 }
 
+/* Hide rehide button when tweet is shielded */
+.grot-shielded-tweet:not(.grot-is-revealed) .grot-rehide-btn {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* Apply CSS Blur filter ONLY when container is NOT revealed */
 .grot-shielded-tweet:not(.grot-is-revealed) > div:not(.grot-overlay-shield):not(.grot-rehide-btn) {
   filter: blur(14px) opacity(0.35) !important;
