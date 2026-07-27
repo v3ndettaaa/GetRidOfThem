@@ -195,17 +195,6 @@ function revealTargetElement(targetEl, overlay, rehideBtn) {
     }, 350);
   }
 
-  // Clear blur filter and restore full interactivity on all descendant elements
-  const children = targetEl.querySelectorAll('div, span, p, img, a, article');
-  children.forEach((child) => {
-    if (!child.classList.contains('grot-overlay-shield') && !child.classList.contains('grot-rehide-btn') && !child.closest('.grot-overlay-shield')) {
-      child.style.setProperty('filter', 'none', 'important');
-      child.style.setProperty('opacity', '1', 'important');
-      child.style.setProperty('pointer-events', 'auto', 'important');
-      child.style.setProperty('user-select', 'auto', 'important');
-    }
-  });
-
   if (rehideBtn) {
     rehideBtn.style.removeProperty('display');
     rehideBtn.style.setProperty('display', 'block', 'important');
@@ -229,17 +218,6 @@ function rehideTargetElement(targetEl, overlay, rehideBtn) {
     overlay.style.setProperty('pointer-events', 'auto', 'important');
     overlay.classList.remove('grot-revealed');
   }
-
-  // Restore blur filter on child elements
-  const children = targetEl.querySelectorAll('div, span, p, img, a, article');
-  children.forEach((child) => {
-    if (!child.classList.contains('grot-overlay-shield') && !child.classList.contains('grot-rehide-btn') && !child.closest('.grot-overlay-shield')) {
-      child.style.removeProperty('filter');
-      child.style.removeProperty('opacity');
-      child.style.removeProperty('pointer-events');
-      child.style.removeProperty('user-select');
-    }
-  });
 
   if (rehideBtn) {
     rehideBtn.style.setProperty('opacity', '0', 'important');

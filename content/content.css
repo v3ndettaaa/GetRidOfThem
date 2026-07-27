@@ -31,16 +31,13 @@
 /* Apply CSS Blur filter ONLY when container is NOT revealed */
 .grot-shielded-tweet:not(.grot-is-revealed) > div:not(.grot-overlay-shield):not(.grot-rehide-btn) {
   filter: blur(14px) opacity(0.35) !important;
-  transition: filter 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease !important;
+  /* Smooth transition when re-hiding */
+  transition: filter 0.3s ease, opacity 0.3s ease !important;
 }
 
-/* Remove blur & restore full interactivity when explicitly revealed by user */
-.grot-shielded-tweet.grot-is-revealed *,
-.grot-shielded-tweet.grot-is-revealed > div {
-  filter: none !important;
-  opacity: 1 !important;
-  user-select: auto !important;
-  pointer-events: auto !important;
+/* Snappy fast transition when revealing (the blur filter naturally disappears) */
+.grot-shielded-tweet.grot-is-revealed > div:not(.grot-overlay-shield):not(.grot-rehide-btn) {
+  transition: filter 0.15s ease, opacity 0.15s ease !important;
 }
 
 /* Smooth fade out when revealed without breaking event target in-flight */
@@ -48,7 +45,8 @@
 .grot-overlay-shield.grot-revealed {
   opacity: 0 !important;
   pointer-events: none !important;
-  transition: opacity 0.25s ease !important;
+  /* Super fast fade out for the overlay to make click feel instant */
+  transition: opacity 0.15s ease !important;
 }
 
 /* Translucent Glassmorphism Overlay Shield */
