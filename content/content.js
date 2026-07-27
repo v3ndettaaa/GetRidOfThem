@@ -164,10 +164,16 @@ async function incrementShieldedCount() {
  * Unblurs a target element DOM container when user clicks reveal
  */
 function revealTargetElement(targetEl, overlay, rehideBtn) {
+  if (!targetEl) return;
   targetEl.dataset.grotUserRevealed = 'true';
   targetEl.classList.add('grot-is-revealed');
 
-  // Immediately clear blur filter directly from child elements
+  if (overlay) {
+    overlay.style.setProperty('display', 'none', 'important');
+    overlay.classList.add('grot-revealed');
+  }
+
+  // Clear blur filter directly from child elements
   const children = targetEl.querySelectorAll(':scope > div');
   children.forEach((child) => {
     if (child !== overlay && child !== rehideBtn) {
@@ -181,21 +187,13 @@ function revealTargetElement(targetEl, overlay, rehideBtn) {
   if (rehideBtn) {
     rehideBtn.style.setProperty('display', 'block', 'important');
   }
-
-  // Delay hiding overlay by 60ms so mouseup/pointerup events are swallowed by overlay
-  // and Twitter's link router receives 0 navigation events!
-  setTimeout(() => {
-    if (overlay) {
-      overlay.style.setProperty('display', 'none', 'important');
-      overlay.classList.add('grot-revealed');
-    }
-  }, 60);
 }
 
 /**
  * Re-shields a target element DOM container when user clicks re-hide
  */
 function rehideTargetElement(targetEl, overlay, rehideBtn) {
+  if (!targetEl) return;
   delete targetEl.dataset.grotUserRevealed;
   targetEl.classList.remove('grot-is-revealed');
 
@@ -218,6 +216,63 @@ function rehideTargetElement(targetEl, overlay, rehideBtn) {
   if (rehideBtn) {
     rehideBtn.style.setProperty('display', 'none', 'important');
   }
+}
+
+/**
+ * Global capture event listener on window.
+ * Intercepts ALL mouse, pointer, and touch events at Step 1 (window capture level)
+ * BEFORE Twitter's React router can ever receive them.
+ */
+function setupGlobalWindowInterceptor() {
+  const targetEventTypes = ['click', 'mousedown', 'mouseup', 'pointerdown', 'pointerup', 'touchstart', 'touchend'];
+
+  targetEventTypes.forEach((eventType) => {
+    window.addEventListener(
+      eventType,
+      (e) => {
+        if (!e || !e.target) return;
+
+        // Check if event originated inside an overlay shield or reveal button
+        const overlayShield = e.target.closest ? e.target.closest('.grot-overlay-shield') : null;
+        const rehideBtn = e.target.closest ? e.target.closest('.grot-rehide-btn') : null;
+
+        if (overlayShield) {
+          // Kill the event at window level so Twitter React router gets ZERO notifications!
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+
+          // On click or touchend, unblur the target element immediately
+          if (eventType === 'click' || eventType === 'touchend') {
+            const targetEl = overlayShield.closest('.grot-shielded-tweet') || overlayShield.parentElement;
+            if (targetEl && currentSettings.allowReveal) {
+              const rehideBtnEl = targetEl.querySelector('.grot-rehide-btn');
+              revealTargetElement(targetEl, overlayShield, rehideBtnEl);
+            }
+          }
+
+          return false;
+        }
+
+        if (rehideBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+
+          if (eventType === 'click' || eventType === 'touchend') {
+            const targetEl = rehideBtn.closest('.grot-shielded-tweet') || rehideBtn.parentElement;
+            if (targetEl) {
+              const overlayEl = targetEl.querySelector('.grot-overlay-shield');
+              rehideTargetElement(targetEl, overlayEl, rehideBtn);
+            }
+          }
+
+          return false;
+        }
+      },
+      { capture: true, passive: false }
+    );
+  });
 }
 
 /**
@@ -259,24 +314,10 @@ function shieldElement(targetEl) {
   let rehideBtn = targetEl.querySelector(':scope > .grot-rehide-btn');
   if (!rehideBtn) {
     rehideBtn = document.createElement('button');
+    rehideBtn.type = 'button';
     rehideBtn.className = 'grot-rehide-btn';
     rehideBtn.textContent = getRehideBtnText();
     rehideBtn.style.display = 'none';
-
-    const handleRehide = (e) => {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-      }
-      rehideTargetElement(targetEl, overlay, rehideBtn);
-      return false;
-    };
-
-    ['click', 'mousedown', 'mouseup', 'pointerdown', 'pointerup', 'touchstart', 'touchend'].forEach((evtType) => {
-      rehideBtn.addEventListener(evtType, handleRehide, { capture: true });
-    });
-
     targetEl.appendChild(rehideBtn);
   }
 
@@ -286,34 +327,8 @@ function shieldElement(targetEl) {
     revealBtn.type = 'button';
     revealBtn.className = 'grot-reveal-btn';
     revealBtn.textContent = getRevealBtnText();
-
     card.appendChild(revealBtn);
   }
-
-  let revealTriggered = false;
-
-  // Master handler for overlay click/touch events:
-  // Traps pointerdown/mousedown/pointerup/mouseup so Twitter's link router receives 0 events!
-  // Immediately removes blur filter and delays hiding overlay by 60ms to swallow pointerup
-  const handleOverlayInteraction = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-    }
-
-    if (currentSettings.allowReveal && !revealTriggered) {
-      revealTriggered = true;
-      revealTargetElement(targetEl, overlay, rehideBtn);
-    }
-
-    return false;
-  };
-
-  ['click', 'mousedown', 'pointerdown', 'touchstart'].forEach((evtType) => {
-    overlay.addEventListener(evtType, handleOverlayInteraction, { capture: true });
-    card.addEventListener(evtType, handleOverlayInteraction, { capture: true });
-  });
 
   overlay.appendChild(card);
   targetEl.appendChild(overlay);
@@ -464,6 +479,7 @@ function observeFeed() {
  */
 async function init() {
   await loadSettings();
+  setupGlobalWindowInterceptor();
   scanPageTweets();
   observeFeed();
 
