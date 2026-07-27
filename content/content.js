@@ -225,13 +225,15 @@ function rehideTargetElement(targetEl, overlay, rehideBtn) {
 
   if (rehideBtn) {
     rehideBtn.style.setProperty('opacity', '0', 'important');
-    rehideBtn.style.setProperty('pointer-events', 'none', 'important');
+    // Keep it blocking to absorb trailing events!
+    rehideBtn.style.setProperty('pointer-events', 'auto', 'important');
 
     setTimeout(() => {
       if (rehideBtn) {
         rehideBtn.style.setProperty('display', 'none', 'important');
+        rehideBtn.style.setProperty('pointer-events', 'none', 'important');
       }
-    }, 350);
+    }, 400);
   }
 }
 
