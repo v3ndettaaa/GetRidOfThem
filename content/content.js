@@ -182,8 +182,17 @@ function revealTargetElement(targetEl, overlay, rehideBtn) {
   targetEl.classList.add('grot-is-revealed');
 
   if (overlay) {
-    overlay.style.setProperty('display', 'none', 'important');
+    overlay.style.setProperty('opacity', '0', 'important');
+    overlay.style.setProperty('pointer-events', 'none', 'important');
     overlay.classList.add('grot-revealed');
+
+    // Safely remove display:none AFTER the click event lifecycle has completely ended
+    // to prevent the browser engine from re-targeting the in-flight click event to Twitter's article!
+    setTimeout(() => {
+      if (overlay) {
+        overlay.style.setProperty('display', 'none', 'important');
+      }
+    }, 350);
   }
 
   // Clear blur filter and restore full interactivity on all descendant elements
@@ -211,7 +220,10 @@ function rehideTargetElement(targetEl, overlay, rehideBtn) {
   targetEl.classList.remove('grot-is-revealed');
 
   if (overlay) {
+    overlay.style.removeProperty('display');
     overlay.style.setProperty('display', 'flex', 'important');
+    overlay.style.setProperty('opacity', '1', 'important');
+    overlay.style.setProperty('pointer-events', 'auto', 'important');
     overlay.classList.remove('grot-revealed');
   }
 

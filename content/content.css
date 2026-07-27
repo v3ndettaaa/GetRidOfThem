@@ -36,13 +36,12 @@
   pointer-events: auto !important;
 }
 
-/* Hide overlay completely when revealed */
+/* Smooth fade out when revealed without breaking event target in-flight */
 .grot-shielded-tweet.grot-is-revealed .grot-overlay-shield,
 .grot-overlay-shield.grot-revealed {
-  display: none !important;
   opacity: 0 !important;
   pointer-events: none !important;
-  visibility: hidden !important;
+  transition: opacity 0.25s ease !important;
 }
 
 /* Translucent Glassmorphism Overlay Shield */
@@ -71,7 +70,7 @@
   font-family: "Vazirmatn", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
   text-align: center !important;
   user-select: none !important;
-  transition: opacity 0.3s ease, transform 0.3s ease !important;
+  transition: opacity 0.25s ease, transform 0.25s ease !important;
 }
 
 /* Floating Ultra-Minimalist Glass Pill Card */
