@@ -31,6 +31,7 @@
     "128": "icons/icon-128.png"
   },
   "background": {
+    "scripts": ["background/background.js"],
     "service_worker": "background/background.js",
     "type": "module"
   },
