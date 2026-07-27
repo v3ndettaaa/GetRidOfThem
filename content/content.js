@@ -173,10 +173,10 @@ function revealTargetElement(targetEl, overlay, rehideBtn) {
     overlay.classList.add('grot-revealed');
   }
 
-  // Clear blur filter directly from child elements
-  const children = targetEl.querySelectorAll(':scope > div');
+  // Clear blur filter directly from all descendant elements
+  const children = targetEl.querySelectorAll('div');
   children.forEach((child) => {
-    if (child !== overlay && child !== rehideBtn) {
+    if (!child.classList.contains('grot-overlay-shield') && !child.classList.contains('grot-rehide-btn') && !child.closest('.grot-overlay-shield')) {
       child.style.setProperty('filter', 'none', 'important');
       child.style.setProperty('opacity', '1', 'important');
       child.style.setProperty('pointer-events', 'auto', 'important');
@@ -203,9 +203,9 @@ function rehideTargetElement(targetEl, overlay, rehideBtn) {
   }
 
   // Restore blur filter on child elements
-  const children = targetEl.querySelectorAll(':scope > div');
+  const children = targetEl.querySelectorAll('div');
   children.forEach((child) => {
-    if (child !== overlay && child !== rehideBtn) {
+    if (!child.classList.contains('grot-overlay-shield') && !child.classList.contains('grot-rehide-btn') && !child.closest('.grot-overlay-shield')) {
       child.style.removeProperty('filter');
       child.style.removeProperty('opacity');
       child.style.removeProperty('pointer-events');
@@ -237,18 +237,15 @@ function setupGlobalWindowInterceptor() {
         const rehideBtn = e.target.closest ? e.target.closest('.grot-rehide-btn') : null;
 
         if (overlayShield) {
-          // Kill the event at window level so Twitter React router gets ZERO notifications!
+          // Kill event at Step 1 window capture level so Twitter React router receives ZERO notifications!
           e.preventDefault();
           e.stopPropagation();
           e.stopImmediatePropagation();
 
-          // On click or touchend, unblur the target element immediately
-          if (eventType === 'click' || eventType === 'touchend') {
-            const targetEl = overlayShield.closest('.grot-shielded-tweet') || overlayShield.parentElement;
-            if (targetEl && currentSettings.allowReveal) {
-              const rehideBtnEl = targetEl.querySelector('.grot-rehide-btn');
-              revealTargetElement(targetEl, overlayShield, rehideBtnEl);
-            }
+          const targetEl = overlayShield.closest('.grot-shielded-tweet') || overlayShield.parentElement;
+          if (targetEl && currentSettings.allowReveal) {
+            const rehideBtnEl = targetEl.querySelector('.grot-rehide-btn');
+            revealTargetElement(targetEl, overlayShield, rehideBtnEl);
           }
 
           return false;
@@ -259,12 +256,10 @@ function setupGlobalWindowInterceptor() {
           e.stopPropagation();
           e.stopImmediatePropagation();
 
-          if (eventType === 'click' || eventType === 'touchend') {
-            const targetEl = rehideBtn.closest('.grot-shielded-tweet') || rehideBtn.parentElement;
-            if (targetEl) {
-              const overlayEl = targetEl.querySelector('.grot-overlay-shield');
-              rehideTargetElement(targetEl, overlayEl, rehideBtn);
-            }
+          const targetEl = rehideBtn.closest('.grot-shielded-tweet') || rehideBtn.parentElement;
+          if (targetEl) {
+            const overlayEl = targetEl.querySelector('.grot-overlay-shield');
+            rehideTargetElement(targetEl, overlayEl, rehideBtn);
           }
 
           return false;
@@ -356,7 +351,7 @@ function unshieldElement(targetEl) {
   targetEl.classList.remove('grot-shielded-tweet');
   targetEl.classList.remove('grot-is-revealed');
 
-  const children = targetEl.querySelectorAll(':scope > div');
+  const children = targetEl.querySelectorAll('div');
   children.forEach((child) => {
     child.style.removeProperty('filter');
     child.style.removeProperty('opacity');
