@@ -307,10 +307,10 @@ function shieldElement(targetEl) {
     return;
   }
 
-  // Clean up any stale or existing overlays first on this container to prevent duplicates
+  // If it's already shielded and has the overlay, do not recreate it (prevents DOM thrashing/blinking)
   const existingOverlays = targetEl.querySelectorAll(':scope > .grot-overlay-shield');
   if (existingOverlays.length > 0) {
-    existingOverlays.forEach((el) => el.remove());
+    return; // Already shielded properly
   }
 
   targetEl.classList.add('grot-shielded-tweet');
