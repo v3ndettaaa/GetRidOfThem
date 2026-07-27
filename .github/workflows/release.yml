@@ -14,9 +14,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build Extension ZIP
+      - name: Zip Extension
         run: |
-          zip -r GetRidOfThem.zip content icons popup manifest.json README.md LICENSE
+          zip -r GetRidOfThem.zip content icons popup background manifest.json README.md LICENSE
 
       - name: Move 'latest' Tag
         run: |

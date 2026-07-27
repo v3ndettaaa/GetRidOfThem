@@ -36,6 +36,8 @@ const UI_TRANSLATIONS = {
     statsText: 'توییت تا کنون بلور و مخفی شده است',
     footerText: 'ساخته شده برای آرامش روان شما 💙',
     langSwitchLabel: 'EN',
+    exportBtnText: '📤 خروجی (Export)',
+    importBtnText: '📥 ورود (Import)',
     dir: 'rtl'
   },
   en: {
@@ -56,6 +58,8 @@ const UI_TRANSLATIONS = {
     statsText: 'tweets shielded & hidden so far',
     footerText: 'Built for your mental peace & health 💙',
     langSwitchLabel: 'FA',
+    exportBtnText: '📤 Export List',
+    importBtnText: '📥 Import List',
     dir: 'ltr'
   }
 };
@@ -76,6 +80,9 @@ const emojiTagsContainer = document.getElementById('emoji-tags-container');
 const allowRevealToggle = document.getElementById('allow-reveal-toggle');
 const statsCountEl = document.getElementById('stats-count');
 const toggleUiLangBtn = document.getElementById('toggle-ui-lang-btn');
+const exportBtn = document.getElementById('export-btn');
+const importBtn = document.getElementById('import-btn');
+const importFile = document.getElementById('import-file');
 
 // UI Translatable DOM Elements
 const uiTitle = document.getElementById('ui-title');
@@ -118,6 +125,9 @@ function applyUiTranslations() {
   uiFooterText.textContent = t.footerText;
   uiLangLabel.textContent = t.langSwitchLabel;
   newEmojiInput.placeholder = t.inputPlaceholder;
+
+  if (exportBtn) exportBtn.textContent = t.exportBtnText;
+  if (importBtn) importBtn.textContent = t.importBtnText;
 
   updateStatusBadge(masterToggle.checked);
 }
@@ -295,6 +305,65 @@ toggleUiLangBtn.addEventListener('click', async () => {
   applyUiTranslations();
   renderEmojiTags();
 });
+
+// ==========================================
+// Import / Export Logic
+// ==========================================
+
+if (exportBtn) {
+  exportBtn.addEventListener('click', () => {
+    const dataStr = JSON.stringify(currentSettings.targetEmojis, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'grot_filters.json';
+    a.click();
+    
+    URL.revokeObjectURL(url);
+  });
+}
+
+if (importBtn && importFile) {
+  importBtn.addEventListener('click', () => {
+    importFile.click();
+  });
+
+  importFile.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const importedData = JSON.parse(e.target.result);
+        if (Array.isArray(importedData)) {
+          // Merge with existing and remove duplicates
+          const currentSet = new Set(currentSettings.targetEmojis);
+          importedData.forEach(item => {
+            if (typeof item === 'string' && item.trim() !== '') {
+              currentSet.add(item.trim());
+            }
+          });
+          
+          currentSettings.targetEmojis = Array.from(currentSet);
+          await saveSettings({ targetEmojis: currentSettings.targetEmojis });
+          renderEmojiTags();
+          
+          // Reset file input
+          importFile.value = '';
+        } else {
+          alert(currentSettings.uiLanguage === 'fa' ? 'فرمت فایل نامعتبر است.' : 'Invalid file format.');
+        }
+      } catch (err) {
+        console.error('Import error:', err);
+        alert(currentSettings.uiLanguage === 'fa' ? 'خطا در خواندن فایل.' : 'Error reading file.');
+      }
+    };
+    reader.readAsText(file);
+  });
+}
 
 // Initialize on Popup Load
 document.addEventListener('DOMContentLoaded', loadSettings);

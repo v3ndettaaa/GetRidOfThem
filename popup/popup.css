@@ -300,6 +300,23 @@ input[type="text"]:focus {
   background: var(--primary-hover);
 }
 
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border: 1px solid var(--border-light);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.import-export-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: flex-end;
+}
+
 /* Tag Badges Container */
 .tags-container {
   display: flex;
