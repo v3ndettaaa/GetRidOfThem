@@ -18,20 +18,20 @@ jobs:
         run: |
           zip -r GetRidOfThem.zip content icons popup manifest.json README.md LICENSE
 
-      - name: Move 'nightly' Tag
+      - name: Move 'latest' Tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -f nightly
-          git push origin -f nightly
+          git tag -f latest
+          git push origin -f latest
 
       - name: Publish Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: nightly
-          name: "Development Build (Auto-updated)"
+          tag_name: latest
+          name: "GetRidOfThem (Latest Build)"
           body: "This is the auto-generated ZIP file for the latest version of the extension on the main branch. It updates automatically on every push."
           files: GetRidOfThem.zip
-          prerelease: true
+          make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
