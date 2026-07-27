@@ -1,7 +1,7 @@
 # 🎒🚫 GetRidOfThem - Twitter Mental Health Shield
 ### اکستنشن مرورگر محافظ سلامت روان در توییتر / X
 
-[![Latest Release](https://img.shields.io/github/v/release/v3ndettaaa/GetRidOfThem?label=دانلود%20آخرین%20نسخه%20زیپ&color=purple)](https://github.com/v3ndettaaa/GetRidOfThem/releases/latest)
+[![Download Latest Extension](https://img.shields.io/badge/Download_Extension-GetRidOfThem.zip-7c3aed?style=for-the-badge&logo=github)](https://github.com/v3ndettaaa/GetRidOfThem/releases/latest)
 
 [راهنمای فارسی](#راهنمای-استفاده-فارسی) | [English Guide](#english-guide)
 
