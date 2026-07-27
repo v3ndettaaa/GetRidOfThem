@@ -1,61 +1,36 @@
-name: Automated Extension Release & Zip Package
+name: Build and Release Extension
 
 on:
   push:
     branches:
       - main
-    tags:
-      - 'v*'
-  workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
-  build-release:
-    name: Build Zip & Create GitHub Release
+  build-and-release:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Create Extension Zip Package
+      - name: Build Extension ZIP
         run: |
-          mkdir -p dist
-          zip -r dist/GetRidOfThem.zip manifest.json content/ popup/ icons/ README.md LICENSE
+          zip -r GetRidOfThem.zip content icons popup manifest.json README.md LICENSE
 
-      - name: Create or Update GitHub Release (Tag Push)
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/GetRidOfThem.zip
-          title: Release ${{ github.ref_name }}
-          body: |
-            ## 🎒 GetRidOfThem Browser Extension Package
-            
-            ### 🚀 Installation Guide:
-            - **Chrome / Brave / Edge:** Download `GetRidOfThem.zip`, unzip it, go to `chrome://extensions`, enable Developer Mode, and click **Load unpacked**.
-            - **Zen Browser / Firefox:** Download `GetRidOfThem.zip`, go to `about:config`, set `xpinstall.signatures.required` to `false`, then go to `about:addons` -> **Install Add-on From File...** and select `GetRidOfThem.zip`.
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Move 'latest' Tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -f latest
+          git push origin -f latest
 
-      - name: Update Latest Release (Main Branch Push)
-        if: github.ref == 'refs/heads/main'
+      - name: Publish Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: Latest Release (Auto-built)
-          files: dist/GetRidOfThem.zip
-          body: |
-            ## 🎒 GetRidOfThem - Latest Build
-            Automatically updated from latest commit on `main` branch.
-            
-            ### 📥 Downloads:
-            - **`GetRidOfThem.zip`**: Download and install in Chrome, Firefox, or Zen Browser.
-          draft: false
-          prerelease: false
+          name: "GetRidOfThem (Latest Auto-Build)"
+          body: "This is the auto-generated ZIP file for the latest version of the extension on the main branch."
+          files: GetRidOfThem.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

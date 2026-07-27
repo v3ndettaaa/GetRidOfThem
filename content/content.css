@@ -44,7 +44,6 @@
 .grot-shielded-tweet.grot-is-revealed .grot-overlay-shield,
 .grot-overlay-shield.grot-revealed {
   opacity: 0 !important;
-  pointer-events: none !important;
   /* Super fast fade out for the overlay to make click feel instant */
   transition: opacity 0.15s ease !important;
 }

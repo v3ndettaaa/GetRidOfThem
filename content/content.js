@@ -182,17 +182,21 @@ function revealTargetElement(targetEl, overlay, rehideBtn) {
   targetEl.classList.add('grot-is-revealed');
 
   if (overlay) {
+    // 1. Visually fade out the overlay instantly
     overlay.style.setProperty('opacity', '0', 'important');
-    overlay.style.setProperty('pointer-events', 'none', 'important');
+    
+    // 2. DO NOT change pointer-events to none yet! 
+    // We KEEP it blocking to absorb the trailing mouseup and click events!
+    overlay.style.setProperty('pointer-events', 'auto', 'important');
     overlay.classList.add('grot-revealed');
 
-    // Safely remove display:none AFTER the click event lifecycle has completely ended
-    // to prevent the browser engine from re-targeting the in-flight click event to Twitter's article!
+    // 3. Safely remove it from the DOM flow AFTER 400ms (enough time for click event lifecycle to finish)
     setTimeout(() => {
       if (overlay) {
         overlay.style.setProperty('display', 'none', 'important');
+        overlay.style.setProperty('pointer-events', 'none', 'important');
       }
-    }, 350);
+    }, 400);
   }
 
   if (rehideBtn) {
@@ -255,11 +259,9 @@ function setupGlobalWindowInterceptor() {
           e.stopPropagation();
           e.stopImmediatePropagation();
 
-          // 2. CRITICAL FIX: Only trigger UI state changes (opacity: 0, pointer-events: none) on the FINAL 'click' event!
-          // If we change pointer-events to none during 'pointerdown' or 'mousedown', the subsequent 'mouseup' and 'click' 
-          // events from the SAME physical finger press will bypass the now-transparent overlay and hit the tweet underneath,
-          // causing Twitter to open the tweet unexpectedly!
-          if (eventType === 'click') {
+          // 2. Trigger UI state changes IMMEDIATELY on pointerdown or mousedown or click!
+          // This makes the button feel ultra-responsive and fixes the "nothing happens" bug.
+          if (eventType === 'pointerdown' || eventType === 'mousedown' || eventType === 'click' || eventType === 'touchstart') {
             const targetEl = overlayShield.closest('.grot-shielded-tweet') || overlayShield.parentElement;
             if (targetEl && currentSettings.allowReveal) {
               const rehideBtnEl = targetEl.querySelector('.grot-rehide-btn');
@@ -275,8 +277,8 @@ function setupGlobalWindowInterceptor() {
           e.stopPropagation();
           e.stopImmediatePropagation();
 
-          // ONLY trigger re-hide logic on 'click' to prevent pointer event race conditions
-          if (eventType === 'click') {
+          // ONLY trigger re-hide logic immediately
+          if (eventType === 'pointerdown' || eventType === 'mousedown' || eventType === 'click' || eventType === 'touchstart') {
             const targetEl = rehideBtn.closest('.grot-shielded-tweet') || rehideBtn.parentElement;
             if (targetEl) {
               const overlayEl = targetEl.querySelector('.grot-overlay-shield');
