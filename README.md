@@ -1,87 +1,82 @@
 # 🎒🚫 GetRidOfThem - Twitter Mental Health Shield
 ### اکستنشن مرورگر محافظ سلامت روان در توییتر / X
 
-[فارسی](#سلام-دوست-من-راه‌نمای-فارسی) | [English](#hey-there-english-guide)
+[راهنمای فارسی](#راهنمای-استفاده-فارسی) | [English Guide](#english-guide)
 
 ---
 
-<a id="سلام-دوست-من-راه‌نمای-فارسی"></a>
-## 🇮🇷 سلام دوست من! (راهنمای فارسی)
+<a id="راهنمای-استفاده-فارسی"></a>
+## 🇮🇷 راهنمای استفاده (فارسی)
 
-خیلی خوش اومدی! 👋  
-اگه تو هم توی توییتر (X) چرخ می‌زنی و از دیدن توییت‌های یک‌سری افراد که توی اسم یا آیدیشون کوله‌پشتی (🎒) دارن خسته شدی و اعصابت خورد میشه، این اکستنشن دقیقا برای تو ساخته شده! 
+خوش آمدید! 👋  
+این اکستنشن برای کاربران مرورگرهای وب طراحی شده تا با فیلتر هوشمند توییت‌ها و محتواهای نامطلوب در توییتر (X) — به ویژه حساب‌هایی که دارای ایموجی کوله‌پشتی (🎒) در نام یا آیدی خود هستند — به حفظ آرامش و سلامت روان شما کمک کند.
 
-هدف اصلی این اکستنشن خییییلی ساده‌ست: **حفظ آرامش و سلامت روان تو!**  
-وقتی این اکستنشن روی مرورگرت فعال باشه، تمام توییت‌های این افراد به صورت خودکار بلور (مخفی) میشن و یک شیلد خوشگل شیشه‌ای روشون قرار می‌گیره که روش نوشته:  
+با فعال‌سازی این اکستنشن، توییت‌ها و کامنت‌های این حساب‌ها به صورت خودکار با یک افکت بلور شیشه‌ای قرار می‌گیرند و پیام هشدار زیر روی آن‌ها نمایش داده می‌شود:
 > **«برای سلامت روان نبین»**
 
-### ✨ امکانات و خفن‌بازی‌های این اکستنشن:
-- **بلور هوشمند و سریع:** به محض اینکه توییت جدیدی توی فیدت ظاهر بشه، بدون افت سرعت مرورگر، فورا مخفی میشه.
-- **فیلتر هوشمند کوت‌توییت‌ها (Nested Quote Shielding):** اگه یک فرد سالم توییت یک فرد کوله‌پشتی‌دار رو کوت کنه، توییت فرد سالم کاملا شفاف می‌مونه و فقط کادر داخلی همون فرد کوله‌پشتی‌دار بلور میشه!
-- **انتخاب فونت سفارشی (فارسی و انگلیسی):** می‌تونی فونت دلخواهت رو برای اکستنشن انتخاب کنی؛ فونت دیفالت فارسی **وزیرمتن (Vazirmatn)** و انگلیسی **Inter** قرار داده شده.
-- **پشتیبانی از زبان‌های مختلف:** می‌تونی متن روی شیلد رو به فارسی، انگلیسی، عربی، اسپانیایی تغییر بدی یا حتی **متن دلخواه خودت** رو بنویسی!
-- **امکان اضافه کردن ایموجی یا کلمه جدید:** فقط به 🎒 محدود نیستی! هر ایموجی یا کلمه‌ای که اعصابت رو خورد می‌کنه می‌تونی توی پاپ‌آپ اضافه کنی تا اون هم فیلتر بشه.
-- **دکمه نمایش سریع (کلیک برای مشاهده):** با کلیک روی دکمه نمایش یا کارت شیشه‌ای، توییت آنی از حالت بلور خارج میشه و هر وقت خواستی دوباره می‌تونی مخفیش کنی!
-- **شمارنده توییت‌های بلاک شده:** دقیقاً بهت نشون میده تا الان چند تا توییت رو از جلو چشمت دور کرده و چقدر به سلامت روانت کمک کرده!
-- **منوی پاپ‌آپ دو زبانه (فارسی و انگلیسی):** با زدن دکمه 🌐 توی منو می‌تونی زبان خودِ اکستنشن رو بین فارسی و انگلیسی سوئیچ کنی.
+### ✨ قابلیت‌ها و ویژگی‌های اصلی:
+- **فیلتر هوشمند و بهینه:** شناسایی آنی توییت‌ها بدون افت سرعت مرورگر با استفاده از MutationObserver بهینه.
+- **فیلتر هوشمند کوت‌توییت‌ها (Nested Quote Shielding):** در صورت کوت شدن توییت توسط کاربر دیگر، توییت اصلی شفاف باقی مانده و تنها کادر داخلی مربوط به کاربر فیلترشده بلور می‌شود.
+- **تنظیمات فونت سفارشی:** قابلیت انتخاب فونت‌های فارسی (پیش‌فرض: **وزیرمتن / Vazirmatn**) و انگلیسی (پیش‌فرض: **Inter**).
+- **پشتیبانی از چند زبان:** امکان تغییر متن هشدار به زبان‌های فارسی، انگلیسی، عربی، اسپانیایی یا متن دلخواه کاربر.
+- **مدیریت ایموجی‌ها و کلمات کلیدی:** امکان افزودن یا حذف ایموجی‌ها و عبارت‌های کلیدی دلخواه در منوی تنظیمات.
+- **قابلیت نمایش سریع (Unblur):** امکان رفع بلور و مشاهده توییت تنها با یک کلیک بر روی دکمه نمایش بدون باز شدن صفحه توییت.
+- **شمارنده توییت‌های فیلترشده:** نمایش تعداد توییت‌های فیلترشده در منوی اکستنشن.
+- **رابط کاربری دو زبانه:** قابلیت تغییر زبان منوی اکستنشن بین فارسی و انگلیسی.
 
 ---
 
-### 🚀 چطوری نصبی‌ش کنم؟ (راهنمای نصب آسان)
+### 🚀 راهنمای نصب
 
 #### 🔹 نصب در مرورگرهای پایه کروم (Chrome / Brave / Edge / Opera):
-1. **فایل‌های پروژه رو دانلود کن** (یا مخزن رو کلون کن).
-2. مرورگر رو باز کن و توی آدرس‌بار اینو بزن:  
-   `chrome://extensions`
-3. از گوشه بالا، تیک گزینه **Developer mode (حالت توسعه‌دهنده)** رو فعال کن.
-4. روی دکمه **Load unpacked (بارگیری ازهم‌بازشده)** کلیک کن و پوشه `GetRidOfThem` رو انتخاب کن.
+1. پروژه را دانلود یا کلون کنید.
+2. آدرس `chrome://extensions` را در مرورگر باز کنید.
+3. گزینه **Developer mode** در بالای صفحه را فعال کنید.
+4. روی دکمه **Load unpacked** کلیک کرده و پوشه `GetRidOfThem` را انتخاب کنید.
 
 #### 🔹 نصب در مرورگر فایرفاکس (Firefox) و زن (Zen Browser):
-1. مرورگر Firefox یا Zen Browser رو باز کن.
-2. توی آدرس‌بار اینو تایپ کن و اینتر بزن:  
-   `about:debugging#/runtime/this-firefox`
-3. روی دکمه **Load Temporary Add-on... (بارگیری افزونه موقت)** کلیک کن.
-4. فایل `manifest.json` درون پوشه پروژه `GetRidOfThem` رو انتخاب کن.
-5. **تمام! 🎉** اکستنشن فعال شد. حالا برو توییتر و با خیال راحت و اعصاب آروم توییت‌ها رو بالا پایین کن!
+1. مرورگر Firefox یا Zen Browser را باز کنید.
+2. آدرس `about:debugging#/runtime/this-firefox` را وارد کنید.
+3. روی دکمه **Load Temporary Add-on...** کلیک کنید.
+4. فایل `manifest.json` درون پوشه `GetRidOfThem` را انتخاب کنید.
 
 ---
 
-<a id="hey-there-english-guide"></a>
-## 🇬🇧 Hey there! (English Guide)
+<a id="english-guide"></a>
+## 🇬🇧 English Guide
 
-Welcome aboard! 👋  
-If you spend time on Twitter/X and want to keep your feed clean from specific toxic accounts (like users who carry the backpack 🎒 emoji in their handle or display name), this extension is built just for you and your **Mental Health**!
+Welcome! 👋  
+**GetRidOfThem** is a browser extension created to protect your mental health and peace of mind on Twitter/X by filtering tweets and replies from targeted users (e.g. accounts with the 🎒 backpack emoji in their display name or handle).
 
-When active, it automatically spots their tweets, places a sleek glassmorphic blur shield over them, and shows a friendly warning:
+When active, tweets from targeted accounts are automatically shielded with a modern glassmorphic blur and a warning badge:
 > **"Hidden for Mental Health"**
 
-### ✨ Key Features & Awesome Extras:
-- **Instant & Smooth Filtering:** Uses light-weight DOM observation so your browser stays super fast with zero lag.
-- **Nested Quote Tweet Filtering:** If a normal user quotes a backpack user, the normal user's tweet stays 100% clean while ONLY the inner quoted box gets blurred!
+### ✨ Key Features:
+- **Instant & Smooth Filtering:** Asynchronous DOM observation with zero browser lag.
+- **Nested Quote Tweet Filtering:** When a normal user quotes a target account, the outer tweet remains unblurred while ONLY the inner quoted box is shielded.
 - **Custom Font Selection:** Choose your preferred Persian font (default: **Vazirmatn**) and English font (default: **Inter**).
-- **Multi-language Warnings:** Choose warning messages in Persian, English, Arabic, Spanish, or enter your own **Custom Text**!
-- **Custom Target Emojis & Keywords:** Not just 🎒! Add any emoji or handle you dislike straight from the extension popup.
-- **Click-to-Reveal:** Click the reveal button or card to unveil the tweet instantly, and re-shield it whenever you want.
-- **Live Stats Counter:** Tracks exactly how many tweets have been shielded from your line of sight.
-- **Bilingual Popup UI (Persian & English):** Toggle the popup interface language anytime with a single click on the 🌐 icon.
+- **Multi-language Warnings:** Support for Persian, English, Arabic, Spanish, or your own custom warning message.
+- **Keyword & Emoji Manager:** Easily add or remove target emojis and handles from the popup menu.
+- **One-Click Unblur:** Click the reveal button to unblur the tweet without triggering Twitter page navigation.
+- **Shield Statistics:** Real-time counter of shielded tweets.
+- **Bilingual Interface:** Toggle popup settings between English and Persian.
 
 ---
 
-### 🚀 How to Install (Quick Setup)
+### 🚀 Installation Guide
 
 #### 🔹 Chrome-based Browsers (Chrome / Brave / Edge / Opera):
-1. Navigate to `chrome://extensions` in your address bar.
-2. Enable **Developer mode** toggle in the top corner.
-3. Click **Load unpacked** and select the `GetRidOfThem` folder.
+1. Download or clone this repository.
+2. Open `chrome://extensions` in your browser.
+3. Enable **Developer mode** in the top corner.
+4. Click **Load unpacked** and select the `GetRidOfThem` directory.
 
 #### 🔹 Firefox & Zen Browser:
-1. Open Firefox or Zen Browser and navigate to:  
-   `about:debugging#/runtime/this-firefox`
-2. Click **Load Temporary Add-on...**
-3. Select the `manifest.json` file inside the `GetRidOfThem` folder.
-4. **You're all set! 🎉** Head over to Twitter/X and enjoy a peaceful feed!
+1. Open Firefox or Zen Browser and navigate to `about:debugging#/runtime/this-firefox`.
+2. Click **Load Temporary Add-on...**.
+3. Select the `manifest.json` file inside the `GetRidOfThem` directory.
 
 ---
 
-### 💙 Made with care for your peace of mind!
-If you love this tool, share it with your friends to keep their mental health safe too!
+### 💙 Built for your mental peace & focus.
+If you find this tool helpful, feel free to share it to help keep feeds peaceful!

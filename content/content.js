@@ -166,7 +166,7 @@ async function incrementShieldedCount() {
 function revealTargetElement(targetEl, overlay, rehideBtn) {
   targetEl.dataset.grotUserRevealed = 'true';
   targetEl.classList.add('grot-is-revealed');
-  
+
   if (overlay) {
     overlay.style.setProperty('display', 'none', 'important');
     overlay.classList.add('grot-revealed');
@@ -266,18 +266,30 @@ function shieldElement(targetEl) {
         e.stopImmediatePropagation();
       }
       rehideTargetElement(targetEl, overlay, rehideBtn);
+      return false;
     };
 
-    ['click', 'mousedown', 'pointerdown', 'touchstart'].forEach((evtType) => {
+    ['click', 'mousedown', 'mouseup', 'pointerdown', 'pointerup', 'touchstart', 'touchend'].forEach((evtType) => {
       rehideBtn.addEventListener(evtType, handleRehide, { capture: true });
     });
 
     targetEl.appendChild(rehideBtn);
   }
 
+  // Trap all mouse/pointer/touch events on overlay to stop Twitter from opening the tweet
+  const stopTwitterNav = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    }
+    return false;
+  };
+
   // Reveal button inside floating glass card if allowed
   if (currentSettings.allowReveal) {
     const revealBtn = document.createElement('button');
+    revealBtn.type = 'button';
     revealBtn.className = 'grot-reveal-btn';
     revealBtn.textContent = getRevealBtnText();
 
@@ -288,14 +300,20 @@ function shieldElement(targetEl) {
         e.stopImmediatePropagation();
       }
       revealTargetElement(targetEl, overlay, rehideBtn);
+      return false;
     };
 
-    ['click', 'mousedown', 'pointerdown', 'touchstart'].forEach((evtType) => {
+    ['click', 'mousedown', 'mouseup', 'pointerdown', 'pointerup', 'touchstart', 'touchend'].forEach((evtType) => {
       revealBtn.addEventListener(evtType, handleReveal, { capture: true });
       card.addEventListener(evtType, handleReveal, { capture: true });
+      overlay.addEventListener(evtType, stopTwitterNav, { capture: true });
     });
 
     card.appendChild(revealBtn);
+  } else {
+    ['click', 'mousedown', 'mouseup', 'pointerdown', 'pointerup', 'touchstart', 'touchend'].forEach((evtType) => {
+      overlay.addEventListener(evtType, stopTwitterNav, { capture: true });
+    });
   }
 
   overlay.appendChild(card);
