@@ -161,10 +161,71 @@ async function incrementShieldedCount() {
 }
 
 /**
+ * Unblurs a target element DOM container when user clicks reveal
+ */
+function revealTargetElement(targetEl, overlay, rehideBtn) {
+  targetEl.dataset.grotUserRevealed = 'true';
+  targetEl.classList.add('grot-is-revealed');
+  
+  if (overlay) {
+    overlay.style.setProperty('display', 'none', 'important');
+    overlay.classList.add('grot-revealed');
+  }
+
+  // Clear blur filter directly from child elements
+  const children = targetEl.querySelectorAll(':scope > div');
+  children.forEach((child) => {
+    if (child !== overlay && child !== rehideBtn) {
+      child.style.setProperty('filter', 'none', 'important');
+      child.style.setProperty('opacity', '1', 'important');
+      child.style.setProperty('pointer-events', 'auto', 'important');
+      child.style.setProperty('user-select', 'auto', 'important');
+    }
+  });
+
+  if (rehideBtn) {
+    rehideBtn.style.setProperty('display', 'block', 'important');
+  }
+}
+
+/**
+ * Re-shields a target element DOM container when user clicks re-hide
+ */
+function rehideTargetElement(targetEl, overlay, rehideBtn) {
+  delete targetEl.dataset.grotUserRevealed;
+  targetEl.classList.remove('grot-is-revealed');
+
+  if (overlay) {
+    overlay.style.setProperty('display', 'flex', 'important');
+    overlay.classList.remove('grot-revealed');
+  }
+
+  // Restore blur filter on child elements
+  const children = targetEl.querySelectorAll(':scope > div');
+  children.forEach((child) => {
+    if (child !== overlay && child !== rehideBtn) {
+      child.style.removeProperty('filter');
+      child.style.removeProperty('opacity');
+      child.style.removeProperty('pointer-events');
+      child.style.removeProperty('user-select');
+    }
+  });
+
+  if (rehideBtn) {
+    rehideBtn.style.setProperty('display', 'none', 'important');
+  }
+}
+
+/**
  * Applies the mental health shield overlay onto a target DOM element (main tweet or inner quote tweet box)
  */
 function shieldElement(targetEl) {
   if (!targetEl) return;
+
+  // If user explicitly revealed this element, keep it revealed!
+  if (targetEl.dataset.grotUserRevealed === 'true') {
+    return;
+  }
 
   // Clean up any stale or existing overlays first on this container to prevent duplicates
   const existingOverlays = targetEl.querySelectorAll(':scope > .grot-overlay-shield');
@@ -197,15 +258,20 @@ function shieldElement(targetEl) {
     rehideBtn.className = 'grot-rehide-btn';
     rehideBtn.textContent = getRehideBtnText();
     rehideBtn.style.display = 'none';
-    rehideBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      overlay.style.display = 'flex';
-      overlay.classList.remove('grot-revealed');
-      targetEl.classList.remove('grot-is-revealed');
-      rehideBtn.style.display = 'none';
+
+    const handleRehide = (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+      }
+      rehideTargetElement(targetEl, overlay, rehideBtn);
+    };
+
+    ['click', 'mousedown', 'pointerdown', 'touchstart'].forEach((evtType) => {
+      rehideBtn.addEventListener(evtType, handleRehide, { capture: true });
     });
+
     targetEl.appendChild(rehideBtn);
   }
 
@@ -215,20 +281,21 @@ function shieldElement(targetEl) {
     revealBtn.className = 'grot-reveal-btn';
     revealBtn.textContent = getRevealBtnText();
 
-    const doReveal = (e) => {
+    const handleReveal = (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
       }
-      overlay.style.display = 'none';
-      overlay.classList.add('grot-revealed');
-      targetEl.classList.add('grot-is-revealed');
-      if (rehideBtn) rehideBtn.style.display = 'block';
+      revealTargetElement(targetEl, overlay, rehideBtn);
     };
 
-    revealBtn.addEventListener('click', doReveal);
-    card.addEventListener('click', doReveal);
+    ['click', 'mousedown', 'pointerdown', 'touchstart'].forEach((evtType) => {
+      revealBtn.addEventListener(evtType, handleReveal, { capture: true });
+      card.addEventListener(evtType, handleReveal, { capture: true });
+    });
+
+    card.appendChild(revealBtn);
   }
 
   overlay.appendChild(card);
@@ -246,6 +313,8 @@ function shieldElement(targetEl) {
  */
 function unshieldElement(targetEl) {
   if (!targetEl) return;
+  delete targetEl.dataset.grotUserRevealed;
+
   const overlays = targetEl.querySelectorAll(':scope > .grot-overlay-shield');
   overlays.forEach((overlay) => overlay.remove());
 
@@ -254,6 +323,14 @@ function unshieldElement(targetEl) {
 
   targetEl.classList.remove('grot-shielded-tweet');
   targetEl.classList.remove('grot-is-revealed');
+
+  const children = targetEl.querySelectorAll(':scope > div');
+  children.forEach((child) => {
+    child.style.removeProperty('filter');
+    child.style.removeProperty('opacity');
+    child.style.removeProperty('pointer-events');
+    child.style.removeProperty('user-select');
+  });
 }
 
 /**
