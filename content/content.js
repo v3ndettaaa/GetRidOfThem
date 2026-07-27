@@ -265,7 +265,9 @@ function shieldElement(targetEl) {
         e.stopPropagation();
         e.stopImmediatePropagation();
       }
-      rehideTargetElement(targetEl, overlay, rehideBtn);
+      if (e.type === 'click' || e.type === 'touchend') {
+        rehideTargetElement(targetEl, overlay, rehideBtn);
+      }
       return false;
     };
 
@@ -286,7 +288,9 @@ function shieldElement(targetEl) {
     card.appendChild(revealBtn);
   }
 
-  // Master handler for overlay click/touch events
+  // Master handler for overlay click/touch events:
+  // Traps pointerdown/mousedown/pointerup/mouseup so Twitter's link router receives 0 events!
+  // Performs reveal action ONLY on click or touchend when overlay is still in place!
   const handleOverlayInteraction = (e) => {
     if (e) {
       e.preventDefault();
@@ -294,11 +298,8 @@ function shieldElement(targetEl) {
       e.stopImmediatePropagation();
     }
 
-    if (currentSettings.allowReveal) {
-      // Reveal if clicked anywhere inside card or revealBtn
-      if (card.contains(e.target) || e.target === card || e.target === overlay) {
-        revealTargetElement(targetEl, overlay, rehideBtn);
-      }
+    if (currentSettings.allowReveal && (e.type === 'click' || e.type === 'touchend')) {
+      revealTargetElement(targetEl, overlay, rehideBtn);
     }
 
     return false;
