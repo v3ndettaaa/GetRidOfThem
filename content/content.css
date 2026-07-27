@@ -1,0 +1,149 @@
+/* GetRidOfThem - Twitter Mental Health Shield Styles */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&family=Inter:wght@400;600;700&family=Roboto:wght@400;600;700&display=swap');
+
+/* Shielded container (works on outer tweets or inner quote-tweet boxes) */
+.grot-shielded-tweet {
+  position: relative !important;
+  transition: all 0.3s ease !important;
+  overflow: hidden !important;
+}
+
+/* Apply actual CSS Blur filter to the content underneath when shielded */
+.grot-shielded-tweet > div:not(.grot-overlay-shield):not(.grot-rehide-btn) {
+  filter: blur(14px) opacity(0.35) !important;
+  transition: filter 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease !important;
+  user-select: none !important;
+  pointer-events: none !important;
+}
+
+/* Remove blur when explicitly revealed by user */
+.grot-shielded-tweet.grot-is-revealed > div {
+  filter: none !important;
+  opacity: 1 !important;
+  user-select: auto !important;
+  pointer-events: auto !important;
+}
+
+/* Translucent Glassmorphism Overlay Shield */
+.grot-overlay-shield {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px 12px !important;
+  box-sizing: border-box !important;
+  border-radius: inherit !important;
+  
+  /* Translucent frosted background */
+  background: rgba(10, 14, 23, 0.45) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  
+  color: #f8fafc !important;
+  font-family: "Vazirmatn", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  text-align: center !important;
+  user-select: none !important;
+  transition: opacity 0.3s ease, transform 0.3s ease !important;
+}
+
+/* Floating Ultra-Minimalist Glass Pill Card */
+.grot-shield-card {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  padding: 6px 16px !important;
+  background: rgba(15, 23, 42, 0.88) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  max-width: 90% !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+}
+
+.grot-shield-card:hover {
+  border-color: rgba(139, 92, 246, 0.4) !important;
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.55), 0 0 16px rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Warning Message Text */
+.grot-shield-message {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  color: #f8fafc !important;
+  letter-spacing: 0.2px !important;
+  white-space: nowrap !important;
+}
+
+/* Reveal / Unblur Button */
+.grot-reveal-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  padding: 4px 10px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 9999px !important;
+  color: #a78bfa !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  outline: none !important;
+  white-space: nowrap !important;
+}
+
+.grot-reveal-btn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+}
+
+.grot-reveal-btn:active {
+  transform: translateY(0) !important;
+}
+
+/* Hidden state when user clicks reveal */
+.grot-overlay-shield.grot-revealed {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  transform: scale(0.98) !important;
+}
+
+/* Badge for revealed tweet to re-hide if needed */
+.grot-rehide-btn {
+  position: absolute !important;
+  top: 8px !important;
+  right: 12px !important;
+  z-index: 9998 !important;
+  padding: 4px 10px !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1px solid rgba(239, 68, 68, 0.4) !important;
+  border-radius: 9999px !important;
+  color: #f87171 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  backdrop-filter: blur(8px) !important;
+  opacity: 0.85 !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.grot-rehide-btn:hover {
+  opacity: 1 !important;
+}

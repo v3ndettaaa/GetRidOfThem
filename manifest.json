@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "GetRidOfThem - Mental Health Shield",
+  "version": "1.0.0",
+  "description": "Blurs and shields tweets from specific users (e.g. with 🎒 emoji) on Twitter/X to protect your mental health.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "getridofthem@mentalhealth.shield",
+      "strict_min_version": "109.0"
+    }
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://x.com/*",
+    "https://twitter.com/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://x.com/*",
+        "https://twitter.com/*"
+      ],
+      "css": [
+        "content/content.css"
+      ],
+      "js": [
+        "content/content.js"
+      ],
+      "run_at": "document_end"
+    }
+  ]
+}

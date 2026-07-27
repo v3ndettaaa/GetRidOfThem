@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GetRidOfThem - Twitter Mental Health Shield</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    
+    <!-- Top Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="logo">🎒🚫</div>
+        <div class="brand-text">
+          <h1 id="ui-title">GetRidOfThem</h1>
+          <p id="ui-subtitle">محافظ سلامت روان توییتر</p>
+        </div>
+      </div>
+      <button id="toggle-ui-lang-btn" class="lang-switch-btn" title="Switch Popup Language">
+        🌐 <span id="ui-lang-label">EN</span>
+      </button>
+    </header>
+
+    <!-- Master Enable/Disable Switch -->
+    <section class="card status-card">
+      <div class="status-info">
+        <span class="status-label" id="ui-master-label">وضعیت فیلتر:</span>
+        <span id="status-badge" class="badge badge-active">فعال 🛡️</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="master-toggle" checked>
+        <span class="slider round"></span>
+      </label>
+    </section>
+
+    <!-- Overlay Language Selector -->
+    <section class="card">
+      <label for="overlay-lang-select" class="section-title" id="ui-overlay-lang-title">زبان متن هشدار روی توییت:</label>
+      <div class="select-wrapper">
+        <select id="overlay-lang-select">
+          <option value="fa">فارسی (برای سلامت روان نبین)</option>
+          <option value="en">English (Hidden for Mental Health)</option>
+          <option value="ar">العربية (محجوب لصحتك النفسية)</option>
+          <option value="es">Español (Oculto por tu salud mental)</option>
+          <option value="custom">متن دلخواه (Custom Text)</option>
+        </select>
+      </div>
+
+      <!-- Custom Text Input (Only visible when 'custom' selected) -->
+      <div id="custom-text-container" class="custom-input-group" style="display: none;">
+        <label for="custom-text-input" id="ui-custom-text-label">متن هشدار سفارشی خود را بنویسید:</label>
+        <input type="text" id="custom-text-input" placeholder="مثلاً: برای سلامت روان نبین" dir="auto">
+      </div>
+    </section>
+
+    <!-- Font Customization Card -->
+    <section class="card">
+      <label class="section-title" id="ui-font-title">تنظیمات فونت اکستنشن (Font Settings):</label>
+      <div class="setting-row">
+        <label for="persian-font-select" class="setting-text" id="ui-persian-font-label">فونت فارسی:</label>
+        <div class="select-wrapper" style="width: 140px;">
+          <select id="persian-font-select">
+            <option value="Vazirmatn">وزیرمتن (دیفالت)</option>
+            <option value="Shabnam">شبنم (Shabnam)</option>
+            <option value="Sahel">ساحل (Sahel)</option>
+            <option value="System">سیستم (System)</option>
+          </select>
+        </div>
+      </div>
+      <div class="setting-row">
+        <label for="english-font-select" class="setting-text" id="ui-english-font-label">فونت انگلیسی:</label>
+        <div class="select-wrapper" style="width: 140px;">
+          <select id="english-font-select">
+            <option value="Inter">Inter (دیفالت)</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Segoe UI">Segoe UI</option>
+            <option value="System">System</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Target Emojis & Keywords Manager -->
+    <section class="card">
+      <label class="section-title" id="ui-target-title">ایموجی‌ها و کلمات کلیدی بلاک‌شده:</label>
+      <div class="add-tag-group">
+        <input type="text" id="new-emoji-input" placeholder="افزودن ایموجی یا آیدی..." dir="auto">
+        <button id="add-emoji-btn" class="btn btn-primary" id="ui-add-btn">افزودن</button>
+      </div>
+      <div id="emoji-tags-container" class="tags-container">
+        <!-- Tag badges dynamically populated via popup.js -->
+      </div>
+    </section>
+
+    <!-- Options Toggles -->
+    <section class="card">
+      <div class="setting-row">
+        <span class="setting-text" id="ui-allow-reveal-label">اجازه کلیک برای مشاهده توییت:</span>
+        <label class="switch switch-sm">
+          <input type="checkbox" id="allow-reveal-toggle" checked>
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Statistics Counter Card -->
+    <section class="card stats-card">
+      <div class="stats-icon">🛡️</div>
+      <div class="stats-content">
+        <span class="stats-number" id="stats-count">0</span>
+        <span class="stats-text" id="ui-stats-text">توییت تا کنون بلور و مخفی شده است</span>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span id="ui-footer-text">ساخته شده برای آرامش روان شما 💙</span>
+    </footer>
+
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
