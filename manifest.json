@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GetRidOfThem - Mental Health Shield",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Blurs and shields tweets from specific users (e.g. with 🎒 emoji) on Twitter/X to protect your mental health.",
   "browser_specific_settings": {
     "gecko": {
