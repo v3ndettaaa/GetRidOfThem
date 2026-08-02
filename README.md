@@ -1,6 +1,7 @@
 # 🎒🚫 GetRidOfThem - Twitter Mental Health Shield
 ### اکستنشن مرورگر محافظ سلامت روان در توییتر / X
 
+[![Get it on Firefox](https://img.shields.io/badge/Available_on-Firefox_Add--ons-FF7139?style=for-the-badge&logo=Firefox-Browser&logoColor=white)](https://addons.mozilla.org/addon/getridofthem/)
 [![Download Latest Extension](https://img.shields.io/badge/Download_Extension-GetRidOfThem.zip-7c3aed?style=for-the-badge&logo=github)](https://github.com/v3ndettaaa/GetRidOfThem/releases/latest)
 
 [راهنمای فارسی](#راهنمای-استفاده-فارسی) | [English Guide](#english-guide)
@@ -41,14 +42,22 @@
 3. گزینه **Developer mode** در بالای صفحه را فعال کنید.
 4. روی دکمه **Load unpacked** کلیک کرده و پوشه اکستنشن را انتخاب کنید.
 
-#### 🔹 نصب **دائمی** در مرورگر زن (Zen Browser) و فایرفاکس (Firefox):
+#### 🔹 نصب در مرورگر فایرفاکس (Firefox) و زن (Zen Browser):
+🎉 **رسمی:** این اکستنشن اکنون در استور موزیلا در دسترس است و می‌توانید با یک کلیک آن را نصب کنید:  
+🦊 **[دانلود و نصب از Firefox Add-ons](https://addons.mozilla.org/addon/getridofthem/)**
+
+<details>
+<summary>نصب دستی (از طریق فایل فشرده)</summary>
+
 برای اینکه اکستنشن همواره به صورت دائمی نصب بماند و با بستن مرورگر پاک نشود:
+
 1. فایل زیپ اکستنشن (`GetRidOfThem.zip`) را دانلود کنید.
 2. مرورگر **Zen** یا **Firefox** را باز کرده و در نوار آدرس عبارت `about:config` را وارد کنید.
 3. عبارت `xpinstall.signatures.required` را جستجو کرده و مقدار آن را به **`false`** تغییر دهید.
 4. آدرس `about:addons` را در مرورگر باز کنید.
 5. روی آیکون چرخ‌دنده ⚙️ کلیک کرده و گزینه **Install Add-on From File...** را انتخاب کنید.
 6. فایل **`GetRidOfThem.zip`** را انتخاب کرده و **Add** را بزنید.
+</details>
 
 ---
 
@@ -80,13 +89,20 @@ When active, targeted content is automatically shielded with a modern glassmorph
 3. Enable **Developer mode** in the top corner.
 4. Click **Load unpacked** and select the extracted folder.
 
-#### 🔹 Permanent Installation on Zen Browser & Firefox:
+#### 🔹 Firefox & Zen Browser:
+🎉 **Official:** The extension is now officially available on the Mozilla Add-ons store! Install it with one click:  
+🦊 **[Get it on Firefox Add-ons](https://addons.mozilla.org/addon/getridofthem/)**
+
+<details>
+<summary>Manual Installation (from ZIP file)</summary>
+
 1. Download `GetRidOfThem.zip`.
 2. Open Zen Browser or Firefox and navigate to `about:config`.
 3. Search for `xpinstall.signatures.required` and set it to **`false`**.
 4. Navigate to `about:addons`.
 5. Click the gear icon ⚙️ and select **Install Add-on From File...**.
 6. Select `GetRidOfThem.zip` and click **Add**.
+</details>
 
 ---
 
